@@ -1,0 +1,3 @@
+let e=null,t=!1;async function n(){if(e)return e;let t=self.location.origin;return e=await(await import(
+/* @vite-ignore */
+`${t}/wasm/varn_wasm.js`)).default({locateFile:e=>`${t}/wasm/${e}`}),e}self.onmessage=async e=>{let r=e.data;try{if(r.type===`init`){await n(),self.postMessage({type:`ready`});return}if(r.type===`run`){if(t){self.postMessage({type:`error`,message:`A run is already in progress.`});return}t=!0;let e=await(await n()).varnRunChunk(r.source);t=!1;let i={type:`done`,result:e};self.postMessage(i)}}catch(e){t=!1;let n={type:`error`,message:e instanceof Error?e.message:String(e)};self.postMessage(n)}};
